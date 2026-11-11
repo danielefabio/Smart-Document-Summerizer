@@ -7,7 +7,6 @@ import {
   RotateCwIcon,
 } from "lucide-react";
 
-import MessageAnimated from "@/components/atoms/MessageAnimated";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -49,7 +48,8 @@ import { Document, Message } from "@/app/types/chat";
 import DocumentList from "../molecules/DocumentList";
 import EmptyMessage from "../molecules/EmptyMessage";
 import { TypingIndicator } from "../atoms/TypingIndicator";
-import { MessageItem } from "../molecules/MessageItem";
+import MessageItem from "../molecules/MessageItem";
+import { getUniqueId } from "@/lib/utils";
 
 export function Chat() {
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -87,9 +87,9 @@ export function Chat() {
   };
 
   const createNewMessage = ({ role, content }: Partial<Message>): Message => {
-    const id = crypto.randomUUID();
+    const uniqueId = `message_id_${getUniqueId()}`;
     return {
-      id: id,
+      id: uniqueId,
       role: role,
       content: content,
     } as Message;
@@ -229,6 +229,7 @@ export function Chat() {
                   <Input
                     className="line-clamp-2 bg-black/10 rounded-[var(--radius-lg)] w-full p-2"
                     type="text"
+                    autoComplete="off"
                     value={question}
                     placeholder={`Ask any question about the file`}
                     onChange={(e) => setQuestion(e.target.value)}

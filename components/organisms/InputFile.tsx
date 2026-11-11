@@ -3,14 +3,16 @@
 import { parsePdf } from "@/app/actions/parsePDF";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { ComponentProps } from "react";
+import { ComponentProps, useState } from "react";
 import { Document } from "@/app/types/chat";
+import { getUniqueId } from "@/lib/utils";
 
 interface InputFileInterface extends ComponentProps<'input'>{
   setDocument: (doc: Document) => void;
 }
 
 export function InputFile({ setDocument, ref, className }: InputFileInterface): React.ReactElement {
+
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
@@ -20,8 +22,8 @@ export function InputFile({ setDocument, ref, className }: InputFileInterface): 
     if (!file) return;
 
     const doc = await parsePdf(file);
-    const id = crypto.randomUUID();
-    setDocument({id: id,name: file.name, content: doc});
+    const uniqueId = `document_id_${getUniqueId()}`;
+    setDocument({id: uniqueId, name: file.name, content: doc});
   };
 
 

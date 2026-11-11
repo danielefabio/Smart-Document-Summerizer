@@ -8,10 +8,10 @@ interface DocumentListInterface {
   removeDocumentOnClick: (id: string) => void;
 }
 
-export default function DocumentList({
+const DocumentList = ({
   documents,
   removeDocumentOnClick,
-}: DocumentListInterface) {
+}: DocumentListInterface) => {
   if (documents.length === 0) return;
 
   return (
@@ -41,4 +41,6 @@ export default function DocumentList({
       ))}
     </div>
   );
-}
+};
+
+export default DocumentList;

@@ -12,7 +12,7 @@ interface EmptyMessageInterface {
   description?: string;
 }
 
-export default function EmptyMessage({title, description}: EmptyMessageInterface) {
+const EmptyMessage = ({title, description}: EmptyMessageInterface) => {
   const emptyTitle = title ?? "Hello, there!";
   const emptyDescription =
     description ??
@@ -30,3 +30,5 @@ export default function EmptyMessage({title, description}: EmptyMessageInterface
     </Empty>
   );
 }
+
+export default EmptyMessage;

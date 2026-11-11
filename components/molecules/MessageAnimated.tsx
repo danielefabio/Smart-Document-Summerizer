@@ -41,7 +41,33 @@ function MessageAnimated({ message }: { message: Message }) {
       >
         {isBot ? (
           <div className="prose prose-sm dark:prose-invert max-w-none">
-            <Markdown remarkPlugins={[remarkGfm]}>{message.content}</Markdown>
+            <Markdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                table: ({ node, ...props }) => (
+                  <div className="w-full overflow-x-auto my-4 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm">
+                    <table
+                      className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800 m-0"
+                      {...props}
+                    />
+                  </div>
+                ),
+                th: ({ node, ...props }) => (
+                  <th
+                    className="py-1 px-2 md:px-3 md:py-2 bg-zinc-50 dark:bg-zinc-900 text-left font-semibold text-zinc-700 dark:text-zinc-300"
+                    {...props}
+                  />
+                ),
+                td: ({ node, ...props }) => (
+                  <td
+                    className="py-1 px-2 border-b md:px-3 md:py-2 text-zinc-600 dark:text-zinc-400"
+                    {...props}
+                  />
+                ),
+              }}
+            >
+              {message.content}
+            </Markdown>
           </div>
         ) : (
           message.content

@@ -13,6 +13,9 @@ export async function POST(request: Request) {
   try {
     const { question, documents }: RagRequest = await request.json();
     const llm_name = process.env.NEXT_LLM_NAME ?? 'qwen3.5-raggg';
+    const ollama_base_url = process.env.NEXT_OLLAMA_URL ?? 'http://localhost';
+    const ollama_port = process.env.NEXT_OLLAMA_PORT ?? '11434';
+    const ollama_api_url = `${ollama_base_url}:${ollama_port}/api`;
 
     // 1. Formatta i documenti
     const contextBlock = documents
@@ -30,7 +33,7 @@ export async function POST(request: Request) {
     `;
 
     // L'URL di default di Ollama è http://localhost:11434/api
-    const ollamaProvider = createOllama({ baseURL: "http://localhost:11435/api"});
+    const ollamaProvider = createOllama({ baseURL: ollama_api_url});
 
     // 3. Richiedi lo stream a Ollama usando il modello 'qwen3.5-rag'
     const { textStream } = await streamText({

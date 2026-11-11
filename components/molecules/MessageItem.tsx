@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { MessageScrollerItem } from "@/components/ui/message-scroller";
 import { Message } from "@/app/types/chat";
-import MessageAnimated from "../atoms/MessageAnimated";
+import MessageAnimated from "./MessageAnimated";
 
 const MessageItemComponent = ({ message }: { message: Message }) => {
   return (
@@ -16,4 +16,6 @@ const MessageItemComponent = ({ message }: { message: Message }) => {
 };
 
 // 2. Avvolgiamo il componente in React.memo
-export const MessageItem = memo(MessageItemComponent);
+const MessageItem = memo(MessageItemComponent);
+
+export default MessageItem;

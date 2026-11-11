@@ -17,6 +17,18 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  allowedDevOrigins: ['192.168.1.40'],
+  // Forza il server di sviluppo a esporre correttamente i WebSocket sulla LAN
+  webpack: (config, { dev, isServer }) => {
+    if (dev && !isServer) {
+      // Configura l'HMR client per usare l'IP corretto anziché localhost
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      };
+    }
+    return config;
+  }
 };
 
 export default nextConfig;
