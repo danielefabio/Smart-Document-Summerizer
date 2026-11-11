@@ -29,7 +29,9 @@ jobs:
 
     # Start the application and run tests
     - name: Run Playwright tests
-      run: pnpm exec playwright test
+      env:
+        NEXT_TELEMETRY_DISABLED: 1
+      run: pnpm exec playwright test --reporter=list
 
     # If a test fails, GitHub loads a screenshot/video of the error as attachment
     - uses: actions/upload-artifact@v4
