@@ -4,20 +4,21 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  workflow_dispatch: # <-- Permette l'avvio manuale
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     
-    - uses: pnpm/action-setup@v4
+    - uses: pnpm/action-setup@v6
       with:
         version: 12.6.0
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v7
       with:
-        node-version: 20
+        node-version: 24
         cache: pnpm
 
     - name: Install dependencies
@@ -27,14 +28,21 @@ jobs:
     - name: Install Playwright Browsers
       run: pnpm exec playwright install --with-deps
 
+    - name: Build Next.js
+      env:
+        NEXT_TELEMETRY_DISABLED: 1
+      run: pnpm build
+
     # Start the application and run tests
     - name: Run Playwright tests
+      # timeout-minutes: 15
       env:
+        CI: true
         NEXT_TELEMETRY_DISABLED: 1
       run: pnpm exec playwright test --reporter=list
 
     # If a test fails, GitHub loads a screenshot/video of the error as attachment
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
