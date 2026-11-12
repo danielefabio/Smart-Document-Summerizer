@@ -22,7 +22,9 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: process.env.CI
+    ? [['github'], ['html', { open: 'never' }]]
+    : [['list'], ['html', { open: 'on-failure' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -46,7 +48,15 @@ export default defineConfig({
 
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: {
+        ...devices['Desktop Safari'],
+        /* launchOptions: {
+          env: {
+            ...process.env,
+            ...(process.platform === "linux" ? { GDK_BACKEND: "x11" } : {}),
+          },
+        }, */
+      },
     },
 
     /* Test against mobile viewports. */
@@ -72,10 +82,12 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: process.env.CI ? 'pnpm build && pnpm start' : 'pnpm dev',
+    command: process.env.CI ? 'pnpm start' : 'pnpm dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 60 * 1000,
+    timeout: 60 * 60 * 1000,
+    stdout: 'pipe',
+    stderr: 'pipe',
     env: {
       NEXT_TELEMETRY_DISABLED: '1', // Evita blocchi di rete in CI
     },
