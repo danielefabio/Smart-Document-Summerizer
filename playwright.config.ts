@@ -82,7 +82,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: process.env.CI ? 'npm start' : 'npm dev',
+    command: process.env.CI ? 'npm start' : 'npm run dev',
     url: 'http://localhost:3000',
 	// gracefulShutdown: { signal: 'SIGTERM', timeout: 500 },
     reuseExistingServer: !process.env.CI,
